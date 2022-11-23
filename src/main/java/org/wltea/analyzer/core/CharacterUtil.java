@@ -1,5 +1,5 @@
 /**
- * IK 中文分词  版本 5.0
+ * IK 中文分詞  版本 5.0
  * IK Analyzer release 5.0
  * 
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -17,17 +17,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * 源代码由林良益(linliangyi2005@gmail.com)提供
- * 版权声明 2012，乌龙茶工作室
+ * 原始碼由林良益(linliangyi2005@gmail.com)提供
+ * 版權宣告 2012，烏龍茶工作室
  * provided by Linliangyi and copyright 2012 by Oolong studio
  * 
- * 字符集识别工具类
+ * 字符集識別工具類
  */
 package org.wltea.analyzer.core;
 
 /**
  *
- * 字符集识别工具类
+ * 字符集識別工具類
  */
 class CharacterUtil {
 	
@@ -43,9 +43,9 @@ class CharacterUtil {
 	
 	
 	/**
-	 * 识别字符类型
+	 * 識別字符型別
 	 * @param input
-	 * @return int CharacterUtil定义的字符类型常量
+	 * @return int CharacterUtil定義的字元型別常量
 	 */
 	static int identifyCharType(char input){
 		if(input >= '0' && input <= '9'){
@@ -61,11 +61,11 @@ class CharacterUtil {
 			if(ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS  
 					|| ub == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS  
 					|| ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A){
-				//目前已知的中文字符UTF-8集合
+				//目前已知的中文字元UTF-8集合
 				return CHAR_CHINESE;
 				
-			}else if(ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS //全角数字字符和日韩字符
-					//韩文字符集
+			}else if(ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS //全形數字字元和日韓字元
+					//韓文字符集
 					|| ub == Character.UnicodeBlock.HANGUL_SYLLABLES 
 					|| ub == Character.UnicodeBlock.HANGUL_JAMO
 					|| ub == Character.UnicodeBlock.HANGUL_COMPATIBILITY_JAMO
@@ -77,12 +77,12 @@ class CharacterUtil {
 				
 			}
 		}
-		//其他的不做处理的字符
+		//其他的不做處理的字元
 		return CHAR_USELESS;
 	}
 	
 	/**
-	 * 进行字符规格化（全角转半角，大写转小写处理）
+	 * 進行字元規格化（全形轉半形，大寫轉小寫處理）
 	 * @param input
 	 * @return char
 	 */

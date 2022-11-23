@@ -74,25 +74,25 @@ curl -XPOST http://localhost:9200/index/_mapping -H 'Content-Type:application/js
 
 ```bash
 curl -XPOST http://localhost:9200/index/_create/1 -H 'Content-Type:application/json' -d'
-{"content":"美国留给伊拉克的是个烂摊子吗"}
+{"content":"美國留給伊拉克的是個爛攤子嗎"}
 '
 ```
 
 ```bash
 curl -XPOST http://localhost:9200/index/_create/2 -H 'Content-Type:application/json' -d'
-{"content":"公安部：各地校车将享最高路权"}
+{"content":"公安部：各地校車將享最高路權"}
 '
 ```
 
 ```bash
 curl -XPOST http://localhost:9200/index/_create/3 -H 'Content-Type:application/json' -d'
-{"content":"中韩渔警冲突调查：韩警平均每天扣1艘中国渔船"}
+{"content":"中韓漁警衝突調查：韓警平均每天扣1艘中國漁船"}
 '
 ```
 
 ```bash
 curl -XPOST http://localhost:9200/index/_create/4 -H 'Content-Type:application/json' -d'
-{"content":"中国驻洛杉矶领事馆遭亚裔男子枪击 嫌犯已自首"}
+{"content":"中國駐洛杉磯領事館遭亞裔男子槍擊 嫌犯已自首"}
 '
 ```
 
@@ -101,7 +101,7 @@ curl -XPOST http://localhost:9200/index/_create/4 -H 'Content-Type:application/j
 ```bash
 curl -XPOST http://localhost:9200/index/_search  -H 'Content-Type:application/json' -d'
 {
-    "query" : { "match" : { "content" : "中国" }},
+    "query" : { "match" : { "content" : "中國" }},
     "highlight" : {
         "pre_tags" : ["<tag1>", "<tag2>"],
         "post_tags" : ["</tag1>", "</tag2>"],
@@ -134,11 +134,11 @@ Result
                 "_id": "4",
                 "_score": 2,
                 "_source": {
-                    "content": "中国驻洛杉矶领事馆遭亚裔男子枪击 嫌犯已自首"
+                    "content": "中國駐洛杉磯領事館遭亞裔男子槍擊 嫌犯已自首"
                 },
                 "highlight": {
                     "content": [
-                        "<tag1>中国</tag1>驻洛杉矶领事馆遭亚裔男子枪击 嫌犯已自首 "
+                        "<tag1>中國</tag1>駐洛杉磯領事館遭亞裔男子槍擊 嫌犯已自首 "
                     ]
                 }
             },
@@ -148,11 +148,11 @@ Result
                 "_id": "3",
                 "_score": 2,
                 "_source": {
-                    "content": "中韩渔警冲突调查：韩警平均每天扣1艘中国渔船"
+                    "content": "中韓漁警衝突調查：韓警平均每天扣1艘中國漁船"
                 },
                 "highlight": {
                     "content": [
-                        "均每天扣1艘<tag1>中国</tag1>渔船 "
+                        "均每天扣1艘<tag1>中國</tag1>漁船 "
                     ]
                 }
             }
@@ -170,49 +170,49 @@ or `{plugins}/elasticsearch-analysis-ik-*/config/IKAnalyzer.cfg.xml`
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-	<comment>IK Analyzer 扩展配置</comment>
-	<!--用户可以在这里配置自己的扩展字典 -->
+	<comment>IK Analyzer 擴充套件配置</comment>
+	<!--使用者可以在這裡配置自己的擴充套件字典 -->
 	<entry key="ext_dict">custom/mydict.dic;custom/single_word_low_freq.dic</entry>
-	 <!--用户可以在这里配置自己的扩展停止词字典-->
+	 <!--使用者可以在這裡配置自己的擴充套件停止詞字典-->
 	<entry key="ext_stopwords">custom/ext_stopword.dic</entry>
- 	<!--用户可以在这里配置远程扩展字典 -->
+ 	<!--使用者可以在這裡配置遠端擴充套件字典 -->
 	<entry key="remote_ext_dict">location</entry>
- 	<!--用户可以在这里配置远程扩展停止词字典-->
+ 	<!--使用者可以在這裡配置遠端擴充套件停止詞字典-->
 	<entry key="remote_ext_stopwords">http://xxx.com/xxx.dic</entry>
 </properties>
 ```
 
-### 热更新 IK 分词使用方法
+### 熱更新 IK 分詞使用方法
 
-目前该插件支持热更新 IK 分词，通过上文在 IK 配置文件中提到的如下配置
+目前該外掛支援熱更新 IK 分詞，透過上文在 IK 配置檔案中提到的如下配置
 
 ```xml
- 	<!--用户可以在这里配置远程扩展字典 -->
+ 	<!--使用者可以在這裡配置遠端擴充套件字典 -->
 	<entry key="remote_ext_dict">location</entry>
- 	<!--用户可以在这里配置远程扩展停止词字典-->
+ 	<!--使用者可以在這裡配置遠端擴充套件停止詞字典-->
 	<entry key="remote_ext_stopwords">location</entry>
 ```
 
-其中 `location` 是指一个 url，比如 `http://yoursite.com/getCustomDict`，该请求只需满足以下两点即可完成分词热更新。
+其中 `location` 是指一個 url，比如 `http://yoursite.com/getCustomDict`，該請求只需滿足以下兩點即可完成分詞熱更新。
 
-1. 该 http 请求需要返回两个头部(header)，一个是 `Last-Modified`，一个是 `ETag`，这两者都是字符串类型，只要有一个发生变化，该插件就会去抓取新的分词进而更新词库。
+1. 該 http 請求需要返回兩個頭部(header)，一個是 `Last-Modified`，一個是 `ETag`，這兩者都是字串型別，只要有一個發生變化，該外掛就會去抓取新的分詞進而更新詞庫。
 
-2. 该 http 请求返回的内容格式是一行一个分词，换行符用 `\n` 即可。
+2. 該 http 請求返回的內容格式是一行一個分詞，換行符用 `\n` 即可。
 
-满足上面两点要求就可以实现热更新分词了，不需要重启 ES 实例。
+滿足上面兩點要求就可以實現熱更新分詞了，不需要重啟 ES 例項。
 
-可以将需自动更新的热词放在一个 UTF-8 编码的 .txt 文件里，放在 nginx 或其他简易 http server 下，当 .txt 文件修改时，http server 会在客户端请求该文件时自动返回相应的 Last-Modified 和 ETag。可以另外做一个工具来从业务系统提取相关词汇，并更新这个 .txt 文件。
+可以將需自動更新的熱詞放在一個 UTF-8 編碼的 .txt 檔案裡，放在 nginx 或其他簡易 http server 下，當 .txt 檔案修改時，http server 會在客戶端請求該檔案時自動返回相應的 Last-Modified 和 ETag。可以另外做一個工具來從業務系統提取相關詞彙，並更新這個 .txt 檔案。
 
 have fun.
 
-常见问题
+常見問題
 -------
 
-1.自定义词典为什么没有生效？
+1.自定義詞典為什麼沒有生效？
 
-请确保你的扩展词典的文本格式为 UTF8 编码
+請確保你的擴充套件詞典的文字格式為 UTF8 編碼
 
-2.如何手动安装？
+2.如何手動安裝？
 
 
 ```bash
@@ -224,32 +224,32 @@ mvn compile
 mvn package
 ```
 
-拷贝和解压release下的文件: #{project_path}/elasticsearch-analysis-ik/target/releases/elasticsearch-analysis-ik-*.zip 到你的 elasticsearch 插件目录, 如: plugins/ik
-重启elasticsearch
+複製和解壓release下的檔案: #{project_path}/elasticsearch-analysis-ik/target/releases/elasticsearch-analysis-ik-*.zip 到你的 elasticsearch 外掛目錄, 如: plugins/ik
+重啟elasticsearch
 
-3.分词测试失败
-请在某个索引下调用analyze接口测试,而不是直接调用analyze接口
+3.分詞測試失敗
+請在某個索引下呼叫analyze介面測試,而不是直接呼叫analyze介面
 如:
 ```bash
 curl -XGET "http://localhost:9200/your_index/_analyze" -H 'Content-Type: application/json' -d'
 {
-   "text":"中华人民共和国MN","tokenizer": "my_ik"
+   "text":"中華人民共和國MN","tokenizer": "my_ik"
 }'
 ```
 
 
-4. ik_max_word 和 ik_smart 什么区别?
+4. ik_max_word 和 ik_smart 什麼區別?
 
 
-ik_max_word: 会将文本做最细粒度的拆分，比如会将“中华人民共和国国歌”拆分为“中华人民共和国,中华人民,中华,华人,人民共和国,人民,人,民,共和国,共和,和,国国,国歌”，会穷尽各种可能的组合，适合 Term Query；
+ik_max_word: 會將文字做最細粒度的拆分，比如會將“中華人民共和國國歌”拆分為“中華人民共和國,中華人民,中華,華人,人民共和國,人民,人,民,共和國,共和,和,國國,國歌”，會窮盡各種可能的組合，適合 Term Query；
 
-ik_smart: 会做最粗粒度的拆分，比如会将“中华人民共和国国歌”拆分为“中华人民共和国,国歌”，适合 Phrase 查询。
+ik_smart: 會做最粗粒度的拆分，比如會將“中華人民共和國國歌”拆分為“中華人民共和國,國歌”，適合 Phrase 查詢。
 
 Changes
 ------
 *自 v5.0.0 起*
 
-- 移除名为 `ik` 的analyzer和tokenizer,请分别使用 `ik_smart` 和 `ik_max_word`
+- 移除名為 `ik` 的analyzer和tokenizer,請分別使用 `ik_smart` 和 `ik_max_word`
 
 
 Thanks

@@ -1,6 +1,6 @@
 
 /**
- * IK 中文分词  版本 5.0
+ * IK 中文分詞  版本 5.0
  * IK Analyzer release 5.0
  * 
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -18,8 +18,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * 源代码由林良益(linliangyi2005@gmail.com)提供
- * 版权声明 2012，乌龙茶工作室
+ * 原始碼由林良益(linliangyi2005@gmail.com)提供
+ * 版權宣告 2012，烏龍茶工作室
  * provided by Linliangyi and copyright 2012 by Oolong studio
  * 
  */
@@ -33,13 +33,13 @@ import java.util.List;
 
 
 /**
- *  中文-日韩文子分词器
+ *  中文-日韓文子分詞器
  */
 class CJKSegmenter implements ISegmenter {
 	
-	//子分词器标签
+	//子分詞器標籤
 	static final String SEGMENTER_NAME = "CJK_SEGMENTER";
-	//待处理的分词hit队列
+	//待處理的分詞hit佇列
 	private List<Hit> tmpHits;
 	
 	
@@ -53,60 +53,60 @@ class CJKSegmenter implements ISegmenter {
 	public void analyze(AnalyzeContext context) {
 		if(CharacterUtil.CHAR_USELESS != context.getCurrentCharType()){
 			
-			//优先处理tmpHits中的hit
+			//優先處理tmpHits中的hit
 			if(!this.tmpHits.isEmpty()){
-				//处理词段队列
+				//處理詞段佇列
 				Hit[] tmpArray = this.tmpHits.toArray(new Hit[this.tmpHits.size()]);
 				for(Hit hit : tmpArray){
 					hit = Dictionary.getSingleton().matchWithHit(context.getSegmentBuff(), context.getCursor() , hit);
 					if(hit.isMatch()){
-						//输出当前的词
+						//輸出當前的詞
 						Lexeme newLexeme = new Lexeme(context.getBufferOffset() , hit.getBegin() , context.getCursor() - hit.getBegin() + 1 , Lexeme.TYPE_CNWORD);
 						context.addLexeme(newLexeme);
 						
-						if(!hit.isPrefix()){//不是词前缀，hit不需要继续匹配，移除
+						if(!hit.isPrefix()){//不是詞字首，hit不需要繼續匹配，移除
 							this.tmpHits.remove(hit);
 						}
 						
 					}else if(hit.isUnmatch()){
-						//hit不是词，移除
+						//hit不是詞，移除
 						this.tmpHits.remove(hit);
 					}					
 				}
 			}			
 			
 			//*********************************
-			//再对当前指针位置的字符进行单字匹配
+			//再對當前指標位置的字元進行單字匹配
 			Hit singleCharHit = Dictionary.getSingleton().matchInMainDict(context.getSegmentBuff(), context.getCursor(), 1);
-			if(singleCharHit.isMatch()){//首字成词
-				//输出当前的词
+			if(singleCharHit.isMatch()){//首字成詞
+				//輸出當前的詞
 				Lexeme newLexeme = new Lexeme(context.getBufferOffset() , context.getCursor() , 1 , Lexeme.TYPE_CNWORD);
 				context.addLexeme(newLexeme);
 
-				//同时也是词前缀
+				//同時也是詞字首
 				if(singleCharHit.isPrefix()){
-					//前缀匹配则放入hit列表
+					//字首匹配則放入hit列表
 					this.tmpHits.add(singleCharHit);
 				}
-			}else if(singleCharHit.isPrefix()){//首字为词前缀
-				//前缀匹配则放入hit列表
+			}else if(singleCharHit.isPrefix()){//首字為詞字首
+				//字首匹配則放入hit列表
 				this.tmpHits.add(singleCharHit);
 			}
 			
 
 		}else{
-			//遇到CHAR_USELESS字符
-			//清空队列
+			//遇到CHAR_USELESS字元
+			//清空佇列
 			this.tmpHits.clear();
 		}
 		
-		//判断缓冲区是否已经读完
+		//判斷緩衝區是否已經讀完
 		if(context.isBufferConsumed()){
-			//清空队列
+			//清空佇列
 			this.tmpHits.clear();
 		}
 		
-		//判断是否锁定缓冲区
+		//判斷是否鎖定緩衝區
 		if(this.tmpHits.size() == 0){
 			context.unlockBuffer(SEGMENTER_NAME);
 			
@@ -119,7 +119,7 @@ class CJKSegmenter implements ISegmenter {
 	 * @see org.wltea.analyzer.core.ISegmenter#reset()
 	 */
 	public void reset() {
-		//清空队列
+		//清空佇列
 		this.tmpHits.clear();
 	}
 

@@ -1,5 +1,5 @@
 /**
- * IK 中文分词  版本 5.0
+ * IK 中文分詞  版本 5.0
  * IK Analyzer release 5.0
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * 源代码由林良益(linliangyi2005@gmail.com)提供
- * 版权声明 2012，乌龙茶工作室
+ * 原始碼由林良益(linliangyi2005@gmail.com)提供
+ * 版權宣告 2012，烏龍茶工作室
  * provided by Linliangyi and copyright 2012 by Oolong studio
  *
  *
@@ -60,12 +60,12 @@ import org.wltea.analyzer.help.ESPluginLoggerFactory;
 
 
 /**
- * 词典管理类,单子模式
+ * 詞典管理類,單子模式
  */
 public class Dictionary {
 
 	/*
-	 * 词典单子实例
+	 * 詞典單子例項
 	 */
 	private static Dictionary singleton;
 
@@ -76,7 +76,7 @@ public class Dictionary {
 	private DictSegment _StopWords;
 
 	/**
-	 * 配置对象
+	 * 配置物件
 	 */
 	private Configuration configuration;
 
@@ -137,8 +137,8 @@ public class Dictionary {
 		return null;
 	}
 	/**
-	 * 词典初始化 由于IK Analyzer的词典采用Dictionary类的静态方法进行词典初始化
-	 * 只有当Dictionary类被实际调用时，才会开始载入词典， 这将延长首次分词操作的时间 该方法提供了一个在应用加载阶段就初始化字典的手段
+	 * 詞典初始化 由於IK Analyzer的詞典採用Dictionary類的靜態方法進行詞典初始化
+	 * 只有當Dictionary類被實際呼叫時，才會開始載入詞典， 這將延長首次分詞操作的時間 該方法提供了一個在應用載入階段就初始化字典的手段
 	 * 
 	 * @return Dictionary
 	 */
@@ -156,9 +156,9 @@ public class Dictionary {
 					singleton.loadStopWordDict();
 
 					if(cfg.isEnableRemoteDict()){
-						// 建立监控线程
+						// 建立監控執行緒
 						for (String location : singleton.getRemoteExtDictionarys()) {
-							// 10 秒是初始延迟可以修改的 60是间隔时间 单位秒
+							// 10 秒是初始延遲可以修改的 60是間隔時間 單位秒
 							pool.scheduleAtFixedRate(new Monitor(location), 10, 60, TimeUnit.SECONDS);
 						}
 						for (String location : singleton.getRemoteExtStopWordDictionarys()) {
@@ -288,9 +288,9 @@ public class Dictionary {
 
 
 	/**
-	 * 获取词典单子实例
+	 * 獲取詞典單子例項
 	 * 
-	 * @return Dictionary 单例对象
+	 * @return Dictionary 單例物件
 	 */
 	public static Dictionary getSingleton() {
 		if (singleton == null) {
@@ -301,16 +301,16 @@ public class Dictionary {
 
 
 	/**
-	 * 批量加载新词条
+	 * 批次載入新詞條
 	 * 
 	 * @param words
-	 *            Collection<String>词条列表
+	 *            Collection<String>詞條列表
 	 */
 	public void addWords(Collection<String> words) {
 		if (words != null) {
 			for (String word : words) {
 				if (word != null) {
-					// 批量加载词条到主内存词典中
+					// 批次載入詞條到主記憶體詞典中
 					singleton._MainDict.fillSegment(word.trim().toCharArray());
 				}
 			}
@@ -318,13 +318,13 @@ public class Dictionary {
 	}
 
 	/**
-	 * 批量移除（屏蔽）词条
+	 * 批次移除（遮蔽）詞條
 	 */
 	public void disableWords(Collection<String> words) {
 		if (words != null) {
 			for (String word : words) {
 				if (word != null) {
-					// 批量屏蔽词条
+					// 批次遮蔽詞條
 					singleton._MainDict.disableSegment(word.trim().toCharArray());
 				}
 			}
@@ -332,34 +332,34 @@ public class Dictionary {
 	}
 
 	/**
-	 * 检索匹配主词典
+	 * 檢索匹配主詞典
 	 * 
-	 * @return Hit 匹配结果描述
+	 * @return Hit 匹配結果描述
 	 */
 	public Hit matchInMainDict(char[] charArray) {
 		return singleton._MainDict.match(charArray);
 	}
 
 	/**
-	 * 检索匹配主词典
+	 * 檢索匹配主詞典
 	 * 
-	 * @return Hit 匹配结果描述
+	 * @return Hit 匹配結果描述
 	 */
 	public Hit matchInMainDict(char[] charArray, int begin, int length) {
 		return singleton._MainDict.match(charArray, begin, length);
 	}
 
 	/**
-	 * 检索匹配量词词典
+	 * 檢索匹配量詞詞典
 	 * 
-	 * @return Hit 匹配结果描述
+	 * @return Hit 匹配結果描述
 	 */
 	public Hit matchInQuantifierDict(char[] charArray, int begin, int length) {
 		return singleton._QuantifierDict.match(charArray, begin, length);
 	}
 
 	/**
-	 * 从已匹配的Hit中直接取出DictSegment，继续向下匹配
+	 * 從已匹配的Hit中直接取出DictSegment，繼續向下匹配
 	 * 
 	 * @return Hit
 	 */
@@ -369,7 +369,7 @@ public class Dictionary {
 	}
 
 	/**
-	 * 判断是否是停止词
+	 * 判斷是否是停止詞
 	 * 
 	 * @return boolean
 	 */
@@ -378,30 +378,30 @@ public class Dictionary {
 	}
 
 	/**
-	 * 加载主词典及扩展词典
+	 * 載入主詞典及擴充套件詞典
 	 */
 	private void loadMainDict() {
-		// 建立一个主词典实例
+		// 建立一個主詞典例項
 		_MainDict = new DictSegment((char) 0);
 
-		// 读取主词典文件
+		// 讀取主詞典檔案
 		Path file = PathUtils.get(getDictRoot(), Dictionary.PATH_DIC_MAIN);
 		loadDictFile(_MainDict, file, false, "Main Dict");
-		// 加载扩展词典
+		// 載入擴充套件詞典
 		this.loadExtDict();
-		// 加载远程自定义词库
+		// 載入遠端自定義詞庫
 		this.loadRemoteExtDict();
 	}
 
 	/**
-	 * 加载用户配置的扩展词典到主词库表
+	 * 載入使用者配置的擴充套件詞典到主詞庫表
 	 */
 	private void loadExtDict() {
-		// 加载扩展词典配置
+		// 載入擴充套件詞典配置
 		List<String> extDictFiles = getExtDictionarys();
 		if (extDictFiles != null) {
 			for (String extDictName : extDictFiles) {
-				// 读取扩展词典文件
+				// 讀取擴充套件詞典檔案
 				logger.info("[Dict Loading] " + extDictName);
 				Path file = PathUtils.get(extDictName);
 				loadDictFile(_MainDict, file, false, "Extra Dict");
@@ -410,21 +410,21 @@ public class Dictionary {
 	}
 
 	/**
-	 * 加载远程扩展词典到主词库表
+	 * 載入遠端擴充套件詞典到主詞庫表
 	 */
 	private void loadRemoteExtDict() {
 		List<String> remoteExtDictFiles = getRemoteExtDictionarys();
 		for (String location : remoteExtDictFiles) {
 			logger.info("[Dict Loading] " + location);
 			List<String> lists = getRemoteWords(location);
-			// 如果找不到扩展的字典，则忽略
+			// 如果找不到擴充套件的字典，則忽略
 			if (lists == null) {
 				logger.error("[Dict Loading] " + location + " load failed");
 				continue;
 			}
 			for (String theWord : lists) {
 				if (theWord != null && !"".equals(theWord.trim())) {
-					// 加载扩展词典数据到主内存词典中
+					// 載入擴充套件詞典資料到主記憶體詞典中
 					logger.info(theWord);
 					_MainDict.fillSegment(theWord.trim().toLowerCase().toCharArray());
 				}
@@ -441,7 +441,7 @@ public class Dictionary {
 	}
 
 	/**
-	 * 从远程服务器上下载自定义词条
+	 * 從遠端伺服器上下載自定義詞條
 	 */
 	private static List<String> getRemoteWordsUnprivileged(String location) {
 
@@ -458,7 +458,7 @@ public class Dictionary {
 			if (response.getStatusLine().getStatusCode() == 200) {
 
 				String charset = "UTF-8";
-				// 获取编码，默认为utf-8
+				// 獲取編碼，預設為utf-8
 				HttpEntity entity = response.getEntity();
 				if(entity!=null){
 					Header contentType = entity.getContentType();
@@ -489,41 +489,41 @@ public class Dictionary {
 	}
 
 	/**
-	 * 加载用户扩展的停止词词典
+	 * 載入使用者擴充套件的停止詞詞典
 	 */
 	private void loadStopWordDict() {
-		// 建立主词典实例
+		// 建立主詞典例項
 		_StopWords = new DictSegment((char) 0);
 
-		// 读取主词典文件
+		// 讀取主詞典檔案
 		Path file = PathUtils.get(getDictRoot(), Dictionary.PATH_DIC_STOP);
 		loadDictFile(_StopWords, file, false, "Main Stopwords");
 
-		// 加载扩展停止词典
+		// 載入擴充套件停止詞典
 		List<String> extStopWordDictFiles = getExtStopWordDictionarys();
 		if (extStopWordDictFiles != null) {
 			for (String extStopWordDictName : extStopWordDictFiles) {
 				logger.info("[Dict Loading] " + extStopWordDictName);
 
-				// 读取扩展词典文件
+				// 讀取擴充套件詞典檔案
 				file = PathUtils.get(extStopWordDictName);
 				loadDictFile(_StopWords, file, false, "Extra Stopwords");
 			}
 		}
 
-		// 加载远程停用词典
+		// 載入遠端停用詞典
 		List<String> remoteExtStopWordDictFiles = getRemoteExtStopWordDictionarys();
 		for (String location : remoteExtStopWordDictFiles) {
 			logger.info("[Dict Loading] " + location);
 			List<String> lists = getRemoteWords(location);
-			// 如果找不到扩展的字典，则忽略
+			// 如果找不到擴充套件的字典，則忽略
 			if (lists == null) {
 				logger.error("[Dict Loading] " + location + " load failed");
 				continue;
 			}
 			for (String theWord : lists) {
 				if (theWord != null && !"".equals(theWord.trim())) {
-					// 加载远程词典数据到主内存中
+					// 載入遠端詞典資料到主記憶體中
 					logger.info(theWord);
 					_StopWords.fillSegment(theWord.trim().toLowerCase().toCharArray());
 				}
@@ -533,12 +533,12 @@ public class Dictionary {
 	}
 
 	/**
-	 * 加载量词词典
+	 * 載入量詞詞典
 	 */
 	private void loadQuantifierDict() {
-		// 建立一个量词典实例
+		// 建立一個量詞典例項
 		_QuantifierDict = new DictSegment((char) 0);
-		// 读取量词词典文件
+		// 讀取量詞詞典檔案
 		Path file = PathUtils.get(getDictRoot(), Dictionary.PATH_DIC_QUANTIFIER);
 		loadDictFile(_QuantifierDict, file, false, "Quantifier");
 	}
@@ -563,7 +563,7 @@ public class Dictionary {
 
 	void reLoadMainDict() {
 		logger.info("start to reload ik dict.");
-		// 新开一个实例加载词典，减少加载过程对当前词典使用的影响
+		// 新開一個例項載入詞典，減少載入過程對當前詞典使用的影響
 		Dictionary tmpDict = new Dictionary(configuration);
 		tmpDict.configuration = getSingleton().configuration;
 		tmpDict.loadMainDict();

@@ -1,5 +1,5 @@
 /**
- * IK 中文分词  版本 5.0
+ * IK 中文分詞  版本 5.0
  * IK Analyzer release 5.0
  * 
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * 源代码由林良益(linliangyi2005@gmail.com)提供
- * 版权声明 2012，乌龙茶工作室
+ * 原始碼由林良益(linliangyi2005@gmail.com)提供
+ * 版權宣告 2012，烏龍茶工作室
  * provided by Linliangyi and copyright 2012 by Oolong studio
  * 
  */
@@ -34,15 +34,15 @@ import org.wltea.analyzer.dic.Hit;
 
 /**
  * 
- * 中文数量词子分词器
+ * 中文數量詞子分詞器
  */
 class CN_QuantifierSegmenter implements ISegmenter{
 	
-	//子分词器标签
+	//子分詞器標籤
 	static final String SEGMENTER_NAME = "QUAN_SEGMENTER";
 	
-	//中文数词
-	private static String Chn_Num = "一二两三四五六七八九十零壹贰叁肆伍陆柒捌玖拾百千万亿拾佰仟萬億兆卅廿";//Cnum
+	//中文數詞
+	private static String Chn_Num = "一二兩三四五六七八九十零壹貳叄肆伍陸柒捌玖拾百千萬億拾佰仟萬億兆卅廿";//Cnum
 	private static Set<Character> ChnNumberChars = new HashSet<Character>();
 	static{
 		char[] ca = Chn_Num.toCharArray();
@@ -52,18 +52,18 @@ class CN_QuantifierSegmenter implements ISegmenter{
 	}
 	
 	/*
-	 * 词元的开始位置，
-	 * 同时作为子分词器状态标识
-	 * 当start > -1 时，标识当前的分词器正在处理字符
+	 * 詞元的開始位置，
+	 * 同時作為子分詞器狀態標識
+	 * 當start > -1 時，標識當前的分詞器正在處理字元
 	 */
 	private int nStart;
 	/*
-	 * 记录词元结束位置
-	 * end记录的是在词元中最后一个出现的合理的数词结束
+	 * 記錄詞元結束位置
+	 * end記錄的是在詞元中最後一個出現的合理的數詞結束
 	 */
 	private int nEnd;
 
-	//待处理的量词hit队列
+	//待處理的量詞hit佇列
 	private List<Hit> countHits;
 	
 	
@@ -74,17 +74,17 @@ class CN_QuantifierSegmenter implements ISegmenter{
 	}
 	
 	/**
-	 * 分词
+	 * 分詞
 	 */
 	public void analyze(AnalyzeContext context) {
-		//处理中文数词
+		//處理中文數詞
 		this.processCNumber(context);
-		//处理中文量词
+		//處理中文量詞
 		this.processCount(context);
 		
-		//判断是否锁定缓冲区
+		//判斷是否鎖定緩衝區
 		if(this.nStart == -1 && this.nEnd == -1	&& countHits.isEmpty()){
-			//对缓冲区解锁
+			//對緩衝區解鎖
 			context.unlockBuffer(SEGMENTER_NAME);
 		}else{
 			context.lockBuffer(SEGMENTER_NAME);
@@ -93,7 +93,7 @@ class CN_QuantifierSegmenter implements ISegmenter{
 	
 
 	/**
-	 * 重置子分词器状态
+	 * 重置子分詞器狀態
 	 */
 	public void reset() {
 		nStart = -1;
@@ -102,116 +102,116 @@ class CN_QuantifierSegmenter implements ISegmenter{
 	}
 	
 	/**
-	 * 处理数词
+	 * 處理數詞
 	 */
 	private void processCNumber(AnalyzeContext context){
-		if(nStart == -1 && nEnd == -1){//初始状态
+		if(nStart == -1 && nEnd == -1){//初始狀態
 			if(CharacterUtil.CHAR_CHINESE == context.getCurrentCharType() 
 					&& ChnNumberChars.contains(context.getCurrentChar())){
-				//记录数词的起始、结束位置
+				//記錄數詞的起始、結束位置
 				nStart = context.getCursor();
 				nEnd = context.getCursor();
 			}
-		}else{//正在处理状态
+		}else{//正在處理狀態
 			if(CharacterUtil.CHAR_CHINESE == context.getCurrentCharType() 
 					&& ChnNumberChars.contains(context.getCurrentChar())){
-				//记录数词的结束位置
+				//記錄數詞的結束位置
 				nEnd = context.getCursor();
 			}else{
-				//输出数词
+				//輸出數詞
 				this.outputNumLexeme(context);
-				//重置头尾指针
+				//重置頭尾指標
 				nStart = -1;
 				nEnd = -1;
 			}
 		}
 		
-		//缓冲区已经用完，还有尚未输出的数词
+		//緩衝區已經用完，還有尚未輸出的數詞
 		if(context.isBufferConsumed() && (nStart != -1 && nEnd != -1)){
-			//输出数词
+			//輸出數詞
 			outputNumLexeme(context);
-			//重置头尾指针
+			//重置頭尾指標
 			nStart = -1;
 			nEnd = -1;
 		}	
 	}
 	
 	/**
-	 * 处理中文量词
+	 * 處理中文量詞
 	 * @param context
 	 */
 	private void processCount(AnalyzeContext context){
-		// 判断是否需要启动量词扫描
+		// 判斷是否需要啟動量詞掃描
 		if(!this.needCountScan(context)){
 			return;
 		}
 		
 		if(CharacterUtil.CHAR_CHINESE == context.getCurrentCharType()){
 			
-			//优先处理countHits中的hit
+			//優先處理countHits中的hit
 			if(!this.countHits.isEmpty()){
-				//处理词段队列
+				//處理詞段佇列
 				Hit[] tmpArray = this.countHits.toArray(new Hit[this.countHits.size()]);
 				for(Hit hit : tmpArray){
 					hit = Dictionary.getSingleton().matchWithHit(context.getSegmentBuff(), context.getCursor() , hit);
 					if(hit.isMatch()){
-						//输出当前的词
+						//輸出當前的詞
 						Lexeme newLexeme = new Lexeme(context.getBufferOffset() , hit.getBegin() , context.getCursor() - hit.getBegin() + 1 , Lexeme.TYPE_COUNT);
 						context.addLexeme(newLexeme);
 						
-						if(!hit.isPrefix()){//不是词前缀，hit不需要继续匹配，移除
+						if(!hit.isPrefix()){//不是詞字首，hit不需要繼續匹配，移除
 							this.countHits.remove(hit);
 						}
 						
 					}else if(hit.isUnmatch()){
-						//hit不是词，移除
+						//hit不是詞，移除
 						this.countHits.remove(hit);
 					}					
 				}
 			}				
 
 			//*********************************
-			//对当前指针位置的字符进行单字匹配
+			//對當前指標位置的字元進行單字匹配
 			Hit singleCharHit = Dictionary.getSingleton().matchInQuantifierDict(context.getSegmentBuff(), context.getCursor(), 1);
-			if(singleCharHit.isMatch()){//首字成量词词
-				//输出当前的词
+			if(singleCharHit.isMatch()){//首字成量詞詞
+				//輸出當前的詞
 				Lexeme newLexeme = new Lexeme(context.getBufferOffset() , context.getCursor() , 1 , Lexeme.TYPE_COUNT);
 				context.addLexeme(newLexeme);
 
-				//同时也是词前缀
+				//同時也是詞字首
 				if(singleCharHit.isPrefix()){
-					//前缀匹配则放入hit列表
+					//字首匹配則放入hit列表
 					this.countHits.add(singleCharHit);
 				}
-			}else if(singleCharHit.isPrefix()){//首字为量词前缀
-				//前缀匹配则放入hit列表
+			}else if(singleCharHit.isPrefix()){//首字為量詞字首
+				//字首匹配則放入hit列表
 				this.countHits.add(singleCharHit);
 			}
 			
 			
 		}else{
-			//输入的不是中文字符
-			//清空未成形的量词
+			//輸入的不是中文字元
+			//清空未成形的量詞
 			this.countHits.clear();
 		}
 		
-		//缓冲区数据已经读完，还有尚未输出的量词
+		//緩衝區資料已經讀完，還有尚未輸出的量詞
 		if(context.isBufferConsumed()){
-			//清空未成形的量词
+			//清空未成形的量詞
 			this.countHits.clear();
 		}
 	}
 	
 	/**
-	 * 判断是否需要扫描量词
+	 * 判斷是否需要掃描量詞
 	 * @return
 	 */
 	private boolean needCountScan(AnalyzeContext context){
 		if((nStart != -1 && nEnd != -1 ) || !countHits.isEmpty()){
-			//正在处理中文数词,或者正在处理量词
+			//正在處理中文數詞,或者正在處理量詞
 			return true;
 		}else{
-			//找到一个相邻的数词
+			//找到一個相鄰的數詞
 			if(!context.getOrgLexemes().isEmpty()){
 				Lexeme l = context.getOrgLexemes().peekLast();
 				if((Lexeme.TYPE_CNUM == l.getLexemeType() ||  Lexeme.TYPE_ARABIC == l.getLexemeType())
@@ -224,12 +224,12 @@ class CN_QuantifierSegmenter implements ISegmenter{
 	}
 	
 	/**
-	 * 添加数词词元到结果集
+	 * 新增數詞詞元到結果集
 	 * @param context
 	 */
 	private void outputNumLexeme(AnalyzeContext context){
 		if(nStart > -1 && nEnd > -1){
-			//输出数词
+			//輸出數詞
 			Lexeme newLexeme = new Lexeme(context.getBufferOffset() , nStart , nEnd - nStart + 1 , Lexeme.TYPE_CNUM);
 			context.addLexeme(newLexeme);
 			

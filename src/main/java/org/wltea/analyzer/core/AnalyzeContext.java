@@ -1,5 +1,5 @@
 /**
- * IK 中文分词  版本 5.0
+ * IK 中文分詞  版本 5.0
  * IK Analyzer release 5.0
  * 
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * 源代码由林良益(linliangyi2005@gmail.com)提供
- * 版权声明 2012，乌龙茶工作室
+ * 原始碼由林良益(linliangyi2005@gmail.com)提供
+ * 版權宣告 2012，烏龍茶工作室
  * provided by Linliangyi and copyright 2012 by Oolong studio
  * 
  */
@@ -37,43 +37,43 @@ import org.wltea.analyzer.dic.Dictionary;
 
 /**
  * 
- * 分词器上下文状态
+ * 分詞器上下文狀態
  * 
  */
 class AnalyzeContext {
 	
-	//默认缓冲区大小
+	//預設緩衝區大小
 	private static final int BUFF_SIZE = 4096;
-	//缓冲区耗尽的临界值
+	//緩衝區耗盡的臨界值
 	private static final int BUFF_EXHAUST_CRITICAL = 100;	
 	
  
-	//字符串读取缓冲
+	//字串讀取緩衝
     private char[] segmentBuff;
-    //字符类型数组
+    //字元型別陣列
     private int[] charTypes;
     
     
-    //记录Reader内已分析的字串总长度
-    //在分多段分析词元时，该变量累计当前的segmentBuff相对于reader起始位置的位移
+    //記錄Reader內已分析的字串總長度
+    //在分多段分析詞元時，該變數累計當前的segmentBuff相對於reader起始位置的位移
 	private int buffOffset;	
-    //当前缓冲区位置指针
+    //當前緩衝區位置指標
     private int cursor;
-    //最近一次读入的,可处理的字串长度
+    //最近一次讀入的,可處理的字串長度
 	private int available;
 
 	
-	//子分词器锁
-    //该集合非空，说明有子分词器在占用segmentBuff
+	//子分詞器鎖
+    //該集合非空，說明有子分詞器在佔用segmentBuff
     private Set<String> buffLocker;
     
-    //原始分词结果集合，未经歧义处理
+    //原始分詞結果集合，未經歧義處理
     private QuickSortSet orgLexemes;    
     //LexemePath位置索引表
     private Map<Integer , LexemePath> pathMap;    
-    //最终分词结果集
+    //最終分詞結果集
     private LinkedList<Lexeme> results;
-	//分词器配置项
+	//分詞器配置項
 	private Configuration cfg;
 
     public AnalyzeContext(Configuration configuration){
@@ -107,35 +107,35 @@ class AnalyzeContext {
     }
 	
     /**
-     * 根据context的上下文情况，填充segmentBuff 
+     * 根據context的上下文情況，填充segmentBuff 
      * @param reader
-     * @return 返回待分析的（有效的）字串长度
+     * @return 返回待分析的（有效的）字串長度
      * @throws java.io.IOException
      */
     int fillBuffer(Reader reader) throws IOException{
     	int readCount = 0;
     	if(this.buffOffset == 0){
-    		//首次读取reader
+    		//首次讀取reader
     		readCount = reader.read(segmentBuff);
     	}else{
     		int offset = this.available - this.cursor;
     		if(offset > 0){
-    			//最近一次读取的>最近一次处理的，将未处理的字串拷贝到segmentBuff头部
+    			//最近一次讀取的>最近一次處理的，將未處理的字串複製到segmentBuff頭部
     			System.arraycopy(this.segmentBuff , this.cursor , this.segmentBuff , 0 , offset);
     			readCount = offset;
     		}
-    		//继续读取reader ，以onceReadIn - onceAnalyzed为起始位置，继续填充segmentBuff剩余的部分
+    		//繼續讀取reader ，以onceReadIn - onceAnalyzed為起始位置，繼續填充segmentBuff剩餘的部分
     		readCount += reader.read(this.segmentBuff , offset , BUFF_SIZE - offset);
     	}            	
-    	//记录最后一次从Reader中读入的可用字符长度
+    	//記錄最後一次從Reader中讀入的可用字元長度
     	this.available = readCount;
-    	//重置当前指针
+    	//重置當前指標
     	this.cursor = 0;
     	return readCount;
     }
 
     /**
-     * 初始化buff指针，处理第一个字符
+     * 初始化buff指標，處理第一個字元
      */
     void initCursor(){
     	this.cursor = 0;
@@ -144,9 +144,9 @@ class AnalyzeContext {
     }
     
     /**
-     * 指针+1
-     * 成功返回 true； 指针已经到了buff尾部，不能前进，返回false
-     * 并处理当前字符
+     * 指標+1
+     * 成功返回 true； 指標已經到了buff尾部，不能前進，返回false
+     * 並處理當前字元
      */
     boolean moveCursor(){
     	if(this.cursor < this.available - 1){
@@ -160,8 +160,8 @@ class AnalyzeContext {
     }
 	
     /**
-     * 设置当前segmentBuff为锁定状态
-     * 加入占用segmentBuff的子分词器名称，表示占用segmentBuff
+     * 設定當前segmentBuff為鎖定狀態
+     * 加入佔用segmentBuff的子分詞器名稱，表示佔用segmentBuff
      * @param segmenterName
      */
 	void lockBuffer(String segmenterName){
@@ -169,7 +169,7 @@ class AnalyzeContext {
 	}
 	
 	/**
-	 * 移除指定的子分词器名，释放对segmentBuff的占用
+	 * 移除指定的子分詞器名，釋放對segmentBuff的佔用
 	 * @param segmenterName
 	 */
 	void unlockBuffer(String segmenterName){
@@ -178,16 +178,16 @@ class AnalyzeContext {
 	
 	/**
 	 * 只要buffLocker中存在segmenterName
-	 * 则buffer被锁定
-	 * @return boolean 缓冲去是否被锁定
+	 * 則buffer被鎖定
+	 * @return boolean 緩衝去是否被鎖定
 	 */
 	boolean isBufferLocked(){
 		return this.buffLocker.size() > 0;
 	}
 
 	/**
-	 * 判断当前segmentBuff是否已经用完
-	 * 当前执针cursor移至segmentBuff末端this.available - 1
+	 * 判斷當前segmentBuff是否已經用完
+	 * 當前執針cursor移至segmentBuff末端this.available - 1
 	 * @return
 	 */
 	boolean isBufferConsumed(){
@@ -195,13 +195,13 @@ class AnalyzeContext {
 	}
 	
 	/**
-	 * 判断segmentBuff是否需要读取新数据
+	 * 判斷segmentBuff是否需要讀取新資料
 	 * 
-	 * 满足一下条件时，
-	 * 1.available == BUFF_SIZE 表示buffer满载
-	 * 2.buffIndex < available - 1 && buffIndex > available - BUFF_EXHAUST_CRITICAL表示当前指针处于临界区内
-	 * 3.!context.isBufferLocked()表示没有segmenter在占用buffer
-	 * 要中断当前循环（buffer要进行移位，并再读取数据的操作）
+	 * 滿足一下條件時，
+	 * 1.available == BUFF_SIZE 表示buffer滿載
+	 * 2.buffIndex < available - 1 && buffIndex > available - BUFF_EXHAUST_CRITICAL表示當前指標處於臨界區內
+	 * 3.!context.isBufferLocked()表示沒有segmenter在佔用buffer
+	 * 要中斷當前迴圈（buffer要進行移位，並再讀取資料的操作）
 	 * @return
 	 */
 	boolean needRefillBuffer(){
@@ -212,14 +212,14 @@ class AnalyzeContext {
 	}
 	
 	/**
-	 * 累计当前的segmentBuff相对于reader起始位置的位移
+	 * 累計當前的segmentBuff相對於reader起始位置的位移
 	 */
 	void markBufferOffset(){
 		this.buffOffset += this.cursor;
 	}
 	
 	/**
-	 * 向分词结果集添加词元
+	 * 向分詞結果集新增詞元
 	 * @param lexeme
 	 */
 	void addLexeme(Lexeme lexeme){
@@ -227,8 +227,8 @@ class AnalyzeContext {
 	}
 	
 	/**
-	 * 添加分词结果路径
-	 * 路径起始位置 ---> 路径 映射表
+	 * 新增分詞結果路徑
+	 * 路徑起始位置 ---> 路徑 對映表
 	 * @param path
 	 */
 	void addLexemePath(LexemePath path){
@@ -239,7 +239,7 @@ class AnalyzeContext {
 	
 	
 	/**
-	 * 返回原始分词结果
+	 * 返回原始分詞結果
 	 * @return
 	 */
 	QuickSortSet getOrgLexemes(){
@@ -247,27 +247,27 @@ class AnalyzeContext {
 	}
 	
 	/**
-	 * 推送分词结果到结果集合
-	 * 1.从buff头部遍历到this.cursor已处理位置
-	 * 2.将map中存在的分词结果推入results
-	 * 3.将map中不存在的CJDK字符以单字方式推入results
+	 * 推送分詞結果到結果集合
+	 * 1.從buff頭部遍歷到this.cursor已處理位置
+	 * 2.將map中存在的分詞結果推入results
+	 * 3.將map中不存在的CJDK字元以單字方式推入results
 	 */
 	void outputToResult(){
 		int index = 0;
 		for( ; index <= this.cursor ;){
-			//跳过非CJK字符
+			//跳過非CJK字元
 			if(CharacterUtil.CHAR_USELESS == this.charTypes[index]){
 				index++;
 				continue;
 			}
-			//从pathMap找出对应index位置的LexemePath
+			//從pathMap找出對應index位置的LexemePath
 			LexemePath path = this.pathMap.get(index);
 			if(path != null){
-				//输出LexemePath中的lexeme到results集合
+				//輸出LexemePath中的lexeme到results集合
 				Lexeme l = path.pollFirst();
 				while(l != null){
 					this.results.add(l);
-					//字典中无单字，但是词元冲突了，切分出相交词元的前一个词元中的单字
+					//字典中無單字，但是詞元衝突了，切分出相交詞元的前一個詞元中的單字
 					/*int innerIndex = index + 1;
 					for (; innerIndex < index + l.getLength(); innerIndex++) {
 						Lexeme innerL = path.peekFirst();
@@ -276,28 +276,28 @@ class AnalyzeContext {
 						}
 					}*/
 					
-					//将index移至lexeme后
+					//將index移至lexeme後
 					index = l.getBegin() + l.getLength();					
 					l = path.pollFirst();
 					if(l != null){
-						//输出path内部，词元间遗漏的单字
+						//輸出path內部，詞元間遺漏的單字
 						for(;index < l.getBegin();index++){
 							this.outputSingleCJK(index);
 						}
 					}
 				}
-			}else{//pathMap中找不到index对应的LexemePath
-				//单字输出
+			}else{//pathMap中找不到index對應的LexemePath
+				//單字輸出
 				this.outputSingleCJK(index);
 				index++;
 			}
 		}
-		//清空当前的Map
+		//清空當前的Map
 		this.pathMap.clear();
 	}
 	
 	/**
-	 * 对CJK字符进行单字输出
+	 * 對CJK字元進行單字輸出
 	 * @param index
 	 */
 	private void outputSingleCJK(int index){
@@ -313,20 +313,20 @@ class AnalyzeContext {
 	/**
 	 * 返回lexeme 
 	 * 
-	 * 同时处理合并
+	 * 同時處理合併
 	 * @return
 	 */
 	Lexeme getNextLexeme(){
-		//从结果集取出，并移除第一个Lexme
+		//從結果集取出，並移除第一個Lexme
 		Lexeme result = this.results.pollFirst();
 		while(result != null){
-    		//数量词合并
+    		//數量詞合併
     		this.compound(result);
     		if(Dictionary.getSingleton().isStopWord(this.segmentBuff ,  result.getBegin() , result.getLength())){
-       			//是停止词继续取列表的下一个
+       			//是停止詞繼續取列表的下一個
     			result = this.results.pollFirst(); 				
     		}else{
-	 			//不是停止词, 生成lexeme的词元文本,输出
+	 			//不是停止詞, 生成lexeme的詞元文字,輸出
 	    		result.setLexemeText(String.valueOf(segmentBuff , result.getBegin() , result.getLength()));
 	    		break;
     		}
@@ -335,7 +335,7 @@ class AnalyzeContext {
 	}
 	
 	/**
-	 * 重置分词上下文状态
+	 * 重置分詞上下文狀態
 	 */
 	void reset(){		
 		this.buffLocker.clear();
@@ -350,42 +350,42 @@ class AnalyzeContext {
 	}
 	
 	/**
-	 * 组合词元
+	 * 組合詞元
 	 */
 	private void compound(Lexeme result){
 
 		if(!this.cfg.isUseSmart()){
 			return ;
 		}
-   		//数量词合并处理
+   		//數量詞合併處理
 		if(!this.results.isEmpty()){
 
 			if(Lexeme.TYPE_ARABIC == result.getLexemeType()){
 				Lexeme nextLexeme = this.results.peekFirst();
 				boolean appendOk = false;
 				if(Lexeme.TYPE_CNUM == nextLexeme.getLexemeType()){
-					//合并英文数词+中文数词
+					//合併英文數詞+中文數詞
 					appendOk = result.append(nextLexeme, Lexeme.TYPE_CNUM);
 				}else if(Lexeme.TYPE_COUNT == nextLexeme.getLexemeType()){
-					//合并英文数词+中文量词
+					//合併英文數詞+中文量詞
 					appendOk = result.append(nextLexeme, Lexeme.TYPE_CQUAN);
 				}
 				if(appendOk){
-					//弹出
+					//彈出
 					this.results.pollFirst(); 
 				}
 			}
 			
-			//可能存在第二轮合并
+			//可能存在第二輪合併
 			if(Lexeme.TYPE_CNUM == result.getLexemeType() && !this.results.isEmpty()){
 				Lexeme nextLexeme = this.results.peekFirst();
 				boolean appendOk = false;
 				 if(Lexeme.TYPE_COUNT == nextLexeme.getLexemeType()){
-					 //合并中文数词+中文量词
+					 //合併中文數詞+中文量詞
  					appendOk = result.append(nextLexeme, Lexeme.TYPE_CQUAN);
  				}  
 				if(appendOk){
-					//弹出
+					//彈出
 					this.results.pollFirst();   				
 				}
 			}

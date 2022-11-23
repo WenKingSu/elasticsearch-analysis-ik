@@ -18,13 +18,13 @@ public class Configuration {
 	private Environment environment;
 	private Settings settings;
 
-	//是否启用智能分词
+	//是否啟用智慧分詞
 	private  boolean useSmart;
 
-	//是否启用远程词典加载
+	//是否啟用遠端詞典載入
 	private boolean enableRemoteDict=false;
 
-	//是否启用小写处理
+	//是否啟用小寫處理
 	private boolean enableLowercase=true;
 
 

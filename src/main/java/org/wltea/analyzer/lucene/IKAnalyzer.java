@@ -1,5 +1,5 @@
 /**
- * IK 中文分词  版本 5.0.1
+ * IK 中文分詞  版本 5.0.1
  * IK Analyzer release 5.0.1
  * 
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * 源代码由林良益(linliangyi2005@gmail.com)提供
- * 版权声明 2012，乌龙茶工作室
+ * 原始碼由林良益(linliangyi2005@gmail.com)提供
+ * 版權宣告 2012，烏龍茶工作室
  * provided by Linliangyi and copyright 2012 by Oolong studio
  * 
  */
@@ -29,23 +29,23 @@ import org.apache.lucene.analysis.Tokenizer;
 import org.wltea.analyzer.cfg.Configuration;
 
 /**
- * IK分词器，Lucene Analyzer接口实现
- * 兼容Lucene 4.0版本
+ * IK分詞器，Lucene Analyzer介面實現
+ * 相容Lucene 4.0版本
  */
 public final class IKAnalyzer extends Analyzer{
 	
 	private Configuration configuration;
 
 	/**
-	 * IK分词器Lucene  Analyzer接口实现类
+	 * IK分詞器Lucene  Analyzer介面實現類
 	 * 
-	 * 默认细粒度切分算法
+	 * 預設細粒度切分演算法
 	 */
 	public IKAnalyzer(){
 	}
 
     /**
-	 * IK分词器Lucene Analyzer接口实现类
+	 * IK分詞器Lucene Analyzer介面實現類
 	 * 
 	 * @param configuration IK配置
 	 */
@@ -56,7 +56,7 @@ public final class IKAnalyzer extends Analyzer{
 
 
 	/**
-	 * 重载Analyzer接口，构造分词组件
+	 * 過載Analyzer介面，構造分片語件
 	 */
 	@Override
 	protected TokenStreamComponents createComponents(String fieldName) {

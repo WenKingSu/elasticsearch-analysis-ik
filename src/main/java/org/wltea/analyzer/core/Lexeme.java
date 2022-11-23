@@ -1,5 +1,5 @@
 /**
- * IK 中文分词  版本 5.0
+ * IK 中文分詞  版本 5.0
  * IK Analyzer release 5.0
  * 
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -17,15 +17,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * 源代码由林良益(linliangyi2005@gmail.com)提供
- * 版权声明 2012，乌龙茶工作室
+ * 原始碼由林良益(linliangyi2005@gmail.com)提供
+ * 版權宣告 2012，烏龍茶工作室
  * provided by Linliangyi and copyright 2012 by Oolong studio
  * 
  */
 package org.wltea.analyzer.core;
 
 /**
- * IK词元对象 
+ * IK詞元物件 
  */
 public class Lexeme implements Comparable<Lexeme>{
 	//lexemeType常量
@@ -33,32 +33,32 @@ public class Lexeme implements Comparable<Lexeme>{
 	public static final int TYPE_UNKNOWN = 0;
 	//英文
 	public static final int TYPE_ENGLISH = 1;
-	//数字
+	//數字
 	public static final int TYPE_ARABIC = 2;
-	//英文数字混合
+	//英文數字混合
 	public static final int TYPE_LETTER = 3;
-	//中文词元
+	//中文詞元
 	public static final int TYPE_CNWORD = 4;
-	//中文单字
+	//中文單字
 	public static final int TYPE_CNCHAR = 64;
-	//日韩文字
+	//日韓文字
 	public static final int TYPE_OTHER_CJK = 8;
-	//中文数词
+	//中文數詞
 	public static final int TYPE_CNUM = 16;
-	//中文量词
+	//中文量詞
 	public static final int TYPE_COUNT = 32;
-	//中文数量词
+	//中文數量詞
 	public static final int TYPE_CQUAN = 48;
 	
-	//词元的起始位移
+	//詞元的起始位移
 	private int offset;
-    //词元的相对起始位置
+    //詞元的相對起始位置
     private int begin;
-    //词元的长度
+    //詞元的長度
     private int length;
-    //词元文本
+    //詞元文字
     private String lexemeText;
-    //词元类型
+    //詞元型別
     private int lexemeType;
     
     
@@ -73,8 +73,8 @@ public class Lexeme implements Comparable<Lexeme>{
 	}
 	
     /*
-     * 判断词元相等算法
-     * 起始位置偏移、起始位置、终止位置相同
+     * 判斷詞元相等演算法
+     * 起始位置偏移、起始位置、終止位置相同
      * @see java.lang.Object#equals(Object o)
      */
 	public boolean equals(Object o){
@@ -101,7 +101,7 @@ public class Lexeme implements Comparable<Lexeme>{
 	}
 	
     /*
-     * 词元哈希编码算法
+     * 詞元雜湊編碼演算法
      * @see java.lang.Object#hashCode()
      */
     public int hashCode(){
@@ -111,15 +111,15 @@ public class Lexeme implements Comparable<Lexeme>{
     }
     
     /*
-     * 词元在排序集合中的比较算法
+     * 詞元在排序集合中的比較演算法
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
 	public int compareTo(Lexeme other) {
-		//起始位置优先
+		//起始位置優先
         if(this.begin < other.getBegin()){
             return -1;
         }else if(this.begin == other.getBegin()){
-        	//词元长度优先
+        	//詞元長度優先
         	if(this.length > other.getLength()){
         		return -1;
         	}else if(this.length == other.getLength()){
@@ -145,7 +145,7 @@ public class Lexeme implements Comparable<Lexeme>{
 		return begin;
 	}
 	/**
-	 * 获取词元在文本中的起始位置
+	 * 獲取詞元在文字中的起始位置
 	 * @return int
 	 */
 	public int getBeginPosition(){
@@ -157,7 +157,7 @@ public class Lexeme implements Comparable<Lexeme>{
 	}
 
 	/**
-	 * 获取词元在文本中的结束位置
+	 * 獲取詞元在文字中的結束位置
 	 * @return int
 	 */
 	public int getEndPosition(){
@@ -165,7 +165,7 @@ public class Lexeme implements Comparable<Lexeme>{
 	}
 	
 	/**
-	 * 获取词元的字符长度
+	 * 獲取詞元的字元長度
 	 * @return int
 	 */
 	public int getLength(){
@@ -180,7 +180,7 @@ public class Lexeme implements Comparable<Lexeme>{
 	}
 	
 	/**
-	 * 获取词元的文本内容
+	 * 獲取詞元的文字內容
 	 * @return String
 	 */
 	public String getLexemeText() {
@@ -201,7 +201,7 @@ public class Lexeme implements Comparable<Lexeme>{
 	}
 
 	/**
-	 * 获取词元类型
+	 * 獲取詞元型別
 	 * @return int
 	 */
 	public int getLexemeType() {
@@ -209,7 +209,7 @@ public class Lexeme implements Comparable<Lexeme>{
 	}
 	
 	/**
-	 * 获取词元类型标示字符串
+	 * 獲取詞元型別標示字串
 	 * @return String
 	 */
 	public String getLexemeTypeString(){
@@ -253,10 +253,10 @@ public class Lexeme implements Comparable<Lexeme>{
 	}
 	
 	/**
-	 * 合并两个相邻的词元
+	 * 合併兩個相鄰的詞元
 	 * @param l
 	 * @param lexemeType
-	 * @return boolean 词元是否成功合并
+	 * @return boolean 詞元是否成功合併
 	 */
 	public boolean append(Lexeme l , int lexemeType){
 		if(l != null && this.getEndPosition() == l.getBeginPosition()){

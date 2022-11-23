@@ -26,7 +26,7 @@ public class Sleep {
                     Thread.sleep(num * 60 * 60 * 1000);
                     return;
                 default:
-                    System.err.println("输入类型错误，应为MSEC,SEC,MIN,HOUR之一");
+                    System.err.println("輸入型別錯誤，應為MSEC,SEC,MIN,HOUR之一");
                     return;
             }
         } catch (InterruptedException e) {

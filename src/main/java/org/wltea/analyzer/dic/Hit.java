@@ -1,6 +1,6 @@
 /**
  * 
- * IK 中文分词  版本 5.0
+ * IK 中文分詞  版本 5.0
  * IK Analyzer release 5.0
  * 
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -18,42 +18,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * 源代码由林良益(linliangyi2005@gmail.com)提供
- * 版权声明 2012，乌龙茶工作室
+ * 原始碼由林良益(linliangyi2005@gmail.com)提供
+ * 版權宣告 2012，烏龍茶工作室
  * provided by Linliangyi and copyright 2012 by Oolong studio
  * 
  */
 package org.wltea.analyzer.dic;
 
 /**
- * 表示一次词典匹配的命中
+ * 表示一次詞典匹配的命中
  */
 public class Hit {
 	//Hit不匹配
 	private static final int UNMATCH = 0x00000000;
 	//Hit完全匹配
 	private static final int MATCH = 0x00000001;
-	//Hit前缀匹配
+	//Hit字首匹配
 	private static final int PREFIX = 0x00000010;
 	
 	
-	//该HIT当前状态，默认未匹配
+	//該HIT當前狀態，預設未匹配
 	private int hitState = UNMATCH;
 	
-	//记录词典匹配过程中，当前匹配到的词典分支节点
+	//記錄詞典匹配過程中，當前匹配到的詞典分支節點
 	private DictSegment matchedDictSegment; 
 	/*
-	 * 词段开始位置
+	 * 詞段開始位置
 	 */
 	private int begin;
 	/*
-	 * 词段的结束位置
+	 * 詞段的結束位置
 	 */
 	private int end;
 	
 	
 	/**
-	 * 判断是否完全匹配
+	 * 判斷是否完全匹配
 	 */
 	public boolean isMatch() {
 		return (this.hitState & MATCH) > 0;
@@ -66,7 +66,7 @@ public class Hit {
 	}
 
 	/**
-	 * 判断是否是词的前缀
+	 * 判斷是否是詞的字首
 	 */
 	public boolean isPrefix() {
 		return (this.hitState & PREFIX) > 0;
@@ -78,7 +78,7 @@ public class Hit {
 		this.hitState = this.hitState | PREFIX;
 	}
 	/**
-	 * 判断是否是不匹配
+	 * 判斷是否是不匹配
 	 */
 	public boolean isUnmatch() {
 		return this.hitState == UNMATCH ;

@@ -1,5 +1,5 @@
 /**
- * IK 中文分词  版本 5.0
+ * IK 中文分詞  版本 5.0
  * IK Analyzer release 5.0
  * 
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * 源代码由林良益(linliangyi2005@gmail.com)提供
- * 版权声明 2012，乌龙茶工作室
+ * 原始碼由林良益(linliangyi2005@gmail.com)提供
+ * 版權宣告 2012，烏龍茶工作室
  * provided by Linliangyi and copyright 2012 by Oolong studio
  * 
  */
@@ -27,19 +27,19 @@ package org.wltea.analyzer.core;
 
 /**
  * 
- * 子分词器接口
+ * 子分詞器介面
  */
 interface ISegmenter {
 	
 	/**
-	 * 从分析器读取下一个可能分解的词元对象
-	 * @param context 分词算法上下文
+	 * 從分析器讀取下一個可能分解的詞元物件
+	 * @param context 分詞演算法上下文
 	 */
 	void analyze(AnalyzeContext context);
 	
 	
 	/**
-	 * 重置子分析器状态
+	 * 重置子分析器狀態
 	 */
 	void reset();
 

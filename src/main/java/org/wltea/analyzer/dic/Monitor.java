@@ -19,16 +19,16 @@ public class Monitor implements Runnable {
 
 	private static CloseableHttpClient httpclient = HttpClients.createDefault();
 	/*
-	 * 上次更改时间
+	 * 上次更改時間
 	 */
 	private String last_modified;
 	/*
-	 * 资源属性
+	 * 資源屬性
 	 */
 	private String eTags;
 
 	/*
-	 * 请求地址
+	 * 請求地址
 	 */
 	private String location;
 
@@ -47,24 +47,24 @@ public class Monitor implements Runnable {
 	}
 
 	/**
-	 * 监控流程：
-	 *  ①向词库服务器发送Head请求
-	 *  ②从响应中获取Last-Modify、ETags字段值，判断是否变化
-	 *  ③如果未变化，休眠1min，返回第①步
-	 * 	④如果有变化，重新加载词典
+	 * 監控流程：
+	 *  ①向詞庫伺服器傳送Head請求
+	 *  ②從響應中獲取Last-Modify、ETags欄位值，判斷是否變化
+	 *  ③如果未變化，休眠1min，返回第①步
+	 * 	④如果有變化，重新載入詞典
 	 *  ⑤休眠1min，返回第①步
 	 */
 
 	public void runUnprivileged() {
 
-		//超时设置
+		//超時設定
 		RequestConfig rc = RequestConfig.custom().setConnectionRequestTimeout(10*1000)
 				.setConnectTimeout(10*1000).setSocketTimeout(15*1000).build();
 
 		HttpHead head = new HttpHead(location);
 		head.setConfig(rc);
 
-		//设置请求头
+		//設定請求頭
 		if (last_modified != null) {
 			head.setHeader("If-Modified-Since", last_modified);
 		}
@@ -83,13 +83,13 @@ public class Monitor implements Runnable {
 				if (((response.getLastHeader("Last-Modified")!=null) && !response.getLastHeader("Last-Modified").getValue().equalsIgnoreCase(last_modified))
 						||((response.getLastHeader("ETag")!=null) && !response.getLastHeader("ETag").getValue().equalsIgnoreCase(eTags))) {
 
-					// 远程词库有更新,需要重新加载词典，并修改last_modified,eTags
+					// 遠端詞庫有更新,需要重新載入詞典，並修改last_modified,eTags
 					Dictionary.getSingleton().reLoadMainDict();
 					last_modified = response.getLastHeader("Last-Modified")==null?null:response.getLastHeader("Last-Modified").getValue();
 					eTags = response.getLastHeader("ETag")==null?null:response.getLastHeader("ETag").getValue();
 				}
 			}else if (response.getStatusLine().getStatusCode()==304) {
-				//没有修改，不做操作
+				//沒有修改，不做操作
 				//noop
 			}else{
 				logger.info("remote_ext_dict {} return bad code {}" , location , response.getStatusLine().getStatusCode() );

@@ -1,5 +1,5 @@
 /**
- * IK 中文分词  版本 5.0.1
+ * IK 中文分詞  版本 5.0.1
  * IK Analyzer release 5.0.1
  * 
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * 源代码由林良益(linliangyi2005@gmail.com)提供
- * 版权声明 2012，乌龙茶工作室
+ * 原始碼由林良益(linliangyi2005@gmail.com)提供
+ * 版權宣告 2012，烏龍茶工作室
  * provided by Linliangyi and copyright 2012 by Oolong studio
  * 
 
@@ -41,21 +41,21 @@ import java.io.Reader;
 import org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute;
 
 /**
- * IK分词器 Lucene Tokenizer适配器类
- * 兼容Lucene 4.0版本
+ * IK分詞器 Lucene Tokenizer介面卡類
+ * 相容Lucene 4.0版本
  */
 public final class IKTokenizer extends Tokenizer {
 	
-	//IK分词器实现
+	//IK分詞器實現
 	private IKSegmenter _IKImplement;
 	
-	//词元文本属性
+	//詞元文字屬性
 	private final CharTermAttribute termAtt;
-	//词元位移属性
+	//詞元位移屬性
 	private final OffsetAttribute offsetAtt;
-	//词元分类属性（该属性分类参考org.wltea.analyzer.core.Lexeme中的分类常量）
+	//詞元分類屬性（該屬性分類參考org.wltea.analyzer.core.Lexeme中的分類常量）
 	private final TypeAttribute typeAtt;
-	//记录最后一个词元的结束位置
+	//記錄最後一個詞元的結束位置
 	private int endPosition;
 
    	private int skippedPositions;
@@ -64,7 +64,7 @@ public final class IKTokenizer extends Tokenizer {
 
 
     /**
-	 * Lucene 4.0 Tokenizer适配器类构造函数
+	 * Lucene 4.0 Tokenizer介面卡類建構函式
      */
 	public IKTokenizer(Configuration configuration){
 	    super();
@@ -81,7 +81,7 @@ public final class IKTokenizer extends Tokenizer {
 	 */
 	@Override
 	public boolean incrementToken() throws IOException {
-		//清除所有的词元属性
+		//清除所有的詞元屬性
 		clearAttributes();
         skippedPositions = 0;
 
@@ -89,22 +89,22 @@ public final class IKTokenizer extends Tokenizer {
 		if(nextLexeme != null){
             posIncrAtt.setPositionIncrement(skippedPositions +1 );
 
-			//将Lexeme转成Attributes
-			//设置词元文本
+			//將Lexeme轉成Attributes
+			//設定詞元文字
 			termAtt.append(nextLexeme.getLexemeText());
-			//设置词元长度
+			//設定詞元長度
 			termAtt.setLength(nextLexeme.getLength());
-			//设置词元位移
+			//設定詞元位移
             offsetAtt.setOffset(correctOffset(nextLexeme.getBeginPosition()), correctOffset(nextLexeme.getEndPosition()));
 
-            //记录分词的最后位置
+            //記錄分詞的最後位置
 			endPosition = nextLexeme.getEndPosition();
-			//记录词元分类
+			//記錄詞元分類
 			typeAtt.setType(nextLexeme.getLexemeTypeString());			
-			//返会true告知还有下个词元
+			//返會true告知還有下個詞元
 			return true;
 		}
-		//返会false告知词元输出完毕
+		//返會false告知詞元輸出完畢
 		return false;
 	}
 	
