@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.wltea.analyzer.cfg;
 
@@ -15,61 +15,61 @@ import java.nio.file.Path;
 
 public class Configuration {
 
-	private Environment environment;
-	private Settings settings;
+    private Environment environment;
+    private Settings settings;
 
-	//是否啟用智慧分詞
-	private  boolean useSmart;
+    //是否啟用智慧分詞
+    private boolean useSmart;
 
-	//是否啟用遠端詞典載入
-	private boolean enableRemoteDict=false;
+    //是否啟用遠端詞典載入
+    private boolean enableRemoteDict = false;
 
-	//是否啟用小寫處理
-	private boolean enableLowercase=true;
+    //是否啟用小寫處理
+    private boolean enableLowercase = true;
 
 
-	@Inject
-	public Configuration(Environment env,Settings settings) {
-		this.environment = env;
-		this.settings=settings;
+    @Inject
+    public Configuration(Environment env, Settings settings) {
+        this.environment = env;
+        this.settings = settings;
 
-		this.useSmart = settings.get("use_smart", "false").equals("true");
-		this.enableLowercase = settings.get("enable_lowercase", "true").equals("true");
-		this.enableRemoteDict = settings.get("enable_remote_dict", "true").equals("true");
+        this.useSmart = settings.get("use_smart", "false").equals("true");
+        this.enableLowercase = settings.get("enable_lowercase", "true").equals("true");
+        this.enableRemoteDict = settings.get("enable_remote_dict", "true").equals("true");
 
-		Dictionary.initial(this);
+        Dictionary.initial(this);
 
-	}
+    }
 
-	public Path getConfigInPluginDir() {
-		return PathUtils
-				.get(new File(AnalysisIkPlugin.class.getProtectionDomain().getCodeSource().getLocation().getPath())
-						.getParent(), "config")
-				.toAbsolutePath();
-	}
+    public Path getConfigInPluginDir() {
+        return PathUtils
+                .get(new File(AnalysisIkPlugin.class.getProtectionDomain().getCodeSource().getLocation().getPath())
+                        .getParent(), "config")
+                .toAbsolutePath();
+    }
 
-	public boolean isUseSmart() {
-		return useSmart;
-	}
+    public boolean isUseSmart() {
+        return useSmart;
+    }
 
-	public Configuration setUseSmart(boolean useSmart) {
-		this.useSmart = useSmart;
-		return this;
-	}
+    public Configuration setUseSmart(boolean useSmart) {
+        this.useSmart = useSmart;
+        return this;
+    }
 
-	public Environment getEnvironment() {
-		return environment;
-	}
+    public Environment getEnvironment() {
+        return environment;
+    }
 
-	public Settings getSettings() {
-		return settings;
-	}
+    public Settings getSettings() {
+        return settings;
+    }
 
-	public boolean isEnableRemoteDict() {
-		return enableRemoteDict;
-	}
+    public boolean isEnableRemoteDict() {
+        return enableRemoteDict;
+    }
 
-	public boolean isEnableLowercase() {
-		return enableLowercase;
-	}
+    public boolean isEnableLowercase() {
+        return enableLowercase;
+    }
 }

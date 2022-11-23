@@ -1,13 +1,13 @@
-"﻿<?xml version=""1.0"" encoding=""UTF-8""?>"
-"<!DOCTYPE properties SYSTEM ""http://java.sun.com/dtd/properties.dtd"">"
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-	<comment>IK Analyzer 擴充套件配置</comment>
-	<!--使用者可以在這裡配置自己的擴充套件字典 -->
-"	<entry key=""ext_dict""></entry>"
-	 <!--使用者可以在這裡配置自己的擴充套件停止詞字典-->
-"	<entry key=""ext_stopwords""></entry>"
-	<!--使用者可以在這裡配置遠端擴充套件字典 -->
-"	<!-- <entry key=""remote_ext_dict"">words_location</entry> -->"
-	<!--使用者可以在這裡配置遠端擴充套件停止詞字典-->
-"	<!-- <entry key=""remote_ext_stopwords"">words_location</entry> -->"
+    <comment>IK Analyzer 擴展配置</comment>
+    <!--使用者可以在這裡配置自己的擴充套件字典 -->
+    <entry key="ext_dict"/>
+    <!--使用者可以在這裡配置自己的擴充套件停止詞字典-->
+    <entry key="ext_stopwords"/>
+    <!--使用者可以在這裡配置遠端擴充套件字典 -->
+    <!-- <entry key="remote_ext_dict">words_location</entry> -->
+    <!--使用者可以在這裡配置遠端擴充套件停止詞字典-->
+    <!-- <entry key="remote_ext_stopwords">words_location</entry> -->
 </properties>
