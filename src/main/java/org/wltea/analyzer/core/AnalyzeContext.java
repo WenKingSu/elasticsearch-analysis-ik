@@ -35,9 +35,7 @@ import org.wltea.analyzer.cfg.Configuration;
 import org.wltea.analyzer.dic.Dictionary;
 
 /**
- *
  * 分詞器上下文狀態
- *
  */
 class AnalyzeContext {
 
@@ -106,7 +104,8 @@ class AnalyzeContext {
     }
 
     /**
-     * 根據context的上下文情況，填充segmentBuff 
+     * 根據context的上下文情況，填充segmentBuff
+     *
      * @param reader
      * @return 返回待分析的（有效的）字串長度
      * @throws java.io.IOException
@@ -161,6 +160,7 @@ class AnalyzeContext {
     /**
      * 設定當前segmentBuff為鎖定狀態
      * 加入佔用segmentBuff的子分詞器名稱，表示佔用segmentBuff
+     *
      * @param segmenterName
      */
     void lockBuffer(String segmenterName) {
@@ -169,6 +169,7 @@ class AnalyzeContext {
 
     /**
      * 移除指定的子分詞器名，釋放對segmentBuff的佔用
+     *
      * @param segmenterName
      */
     void unlockBuffer(String segmenterName) {
@@ -178,6 +179,7 @@ class AnalyzeContext {
     /**
      * 只要buffLocker中存在segmenterName
      * 則buffer被鎖定
+     *
      * @return boolean 緩衝去是否被鎖定
      */
     boolean isBufferLocked() {
@@ -187,6 +189,7 @@ class AnalyzeContext {
     /**
      * 判斷當前segmentBuff是否已經用完
      * 當前執針cursor移至segmentBuff末端this.available - 1
+     *
      * @return
      */
     boolean isBufferConsumed() {
@@ -195,12 +198,13 @@ class AnalyzeContext {
 
     /**
      * 判斷segmentBuff是否需要讀取新資料
-     *
+     * <p>
      * 滿足一下條件時，
      * 1.available == BUFF_SIZE 表示buffer滿載
      * 2.buffIndex < available - 1 && buffIndex > available - BUFF_EXHAUST_CRITICAL表示當前指標處於臨界區內
      * 3.!context.isBufferLocked()表示沒有segmenter在佔用buffer
      * 要中斷當前迴圈（buffer要進行移位，並再讀取資料的操作）
+     *
      * @return
      */
     boolean needRefillBuffer() {
@@ -219,6 +223,7 @@ class AnalyzeContext {
 
     /**
      * 向分詞結果集新增詞元
+     *
      * @param lexeme
      */
     void addLexeme(Lexeme lexeme) {
@@ -228,6 +233,7 @@ class AnalyzeContext {
     /**
      * 新增分詞結果路徑
      * 路徑起始位置 ---> 路徑 對映表
+     *
      * @param path
      */
     void addLexemePath(LexemePath path) {
@@ -239,6 +245,7 @@ class AnalyzeContext {
 
     /**
      * 返回原始分詞結果
+     *
      * @return
      */
     QuickSortSet getOrgLexemes() {
@@ -297,13 +304,18 @@ class AnalyzeContext {
 
     /**
      * 對CJK字元進行單字輸出
+     *
      * @param index
      */
     private void outputSingleCJK(int index) {
-        if (CharacterUtil.CHAR_CHINESE == this.charTypes[index]) {
-            Lexeme singleCharLexeme = new Lexeme(this.buffOffset, index, 1, Lexeme.TYPE_CNCHAR);
-            this.results.add(singleCharLexeme);
-        } else if (CharacterUtil.CHAR_OTHER_CJK == this.charTypes[index]) {
+//        if (CharacterUtil.CHAR_CHINESE == this.charTypes[index]) {
+//            Lexeme singleCharLexeme = new Lexeme(this.buffOffset, index, 1, Lexeme.TYPE_CNCHAR);
+//            this.results.add(singleCharLexeme);
+//        } else if (CharacterUtil.CHAR_OTHER_CJK == this.charTypes[index]) {
+//            Lexeme singleCharLexeme = new Lexeme(this.buffOffset, index, 1, Lexeme.TYPE_OTHER_CJK);
+//            this.results.add(singleCharLexeme);
+//        }
+        if (CharacterUtil.CHAR_OTHER_CJK == this.charTypes[index]) {
             Lexeme singleCharLexeme = new Lexeme(this.buffOffset, index, 1, Lexeme.TYPE_OTHER_CJK);
             this.results.add(singleCharLexeme);
         }
@@ -311,8 +323,9 @@ class AnalyzeContext {
 
     /**
      * 返回lexeme
-     *
+     * <p>
      * 同時處理合併
+     *
      * @return
      */
     Lexeme getNextLexeme() {
