@@ -1,63 +1,30 @@
-package org.wltea.analyzer.dic;
-
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.logging.log4j.Logger;
-import org.elasticsearch.SpecialPermission;
-import org.wltea.analyzer.help.ESPluginLoggerFactory;
+import org.wltea.analyzer.dic.Dictionary;
 
 import java.io.IOException;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 
-public class Monitor implements Runnable {
-
-    private static final Logger logger = ESPluginLoggerFactory.getLogger(Monitor.class.getName());
-
+public class testRunPrivileged {
     private static CloseableHttpClient httpclient = HttpClients.createDefault();
     /*
      * 上次更改時間
      */
-    private String last_modified;
+    private static String last_modified;
     /*
      * 資源屬性
      */
-    private String eTags;
+    private static String eTags;
 
     /*
      * 請求地址
      */
-    private String location;
+    private static final String location = "http://localhost/rest/es/reload";
 
-    public Monitor(String location) {
-        this.location = location;
-        this.last_modified = null;
-        this.eTags = null;
-    }
-
-    public void run() {
-        SpecialPermission.check();
-        AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
-            this.runUnprivileged();
-            return null;
-        });
-    }
-
-    /**
-     * 監控流程：
-     * ①向詞庫伺服器傳送Head請求
-     * ②從響應中獲取Last-Modify、ETags欄位值，判斷是否變化
-     * ③如果未變化，休眠1min，返回第①步
-     * ④如果有變化，重新載入詞典
-     * ⑤休眠1min，返回第①步
-     */
-
-    public void runUnprivileged() {
-
+    public static void main(String[] args) {
         //超時設定
         RequestConfig rc = RequestConfig.custom().setConnectionRequestTimeout(10 * 1000)
                 .setConnectTimeout(10 * 1000).setSocketTimeout(15 * 1000).build();
@@ -72,6 +39,7 @@ public class Monitor implements Runnable {
         if (eTags != null) {
             head.setHeader("If-None-Match", eTags);
         }
+
         HttpGet get = new HttpGet(location);
         get.setConfig(rc);
 
@@ -96,20 +64,20 @@ public class Monitor implements Runnable {
                 //沒有修改，不做操作
                 //noop
             } else {
-                logger.info("remote_ext_dict {} return bad code {}", location, response.getStatusLine().getStatusCode());
+                System.out.printf("remote_ext_dict %s return bad code %s\n", location, response.getStatusLine().getStatusCode());
             }
 
         } catch (Exception e) {
-            logger.error("remote_ext_dict {} error!", e, location);
+            System.out.printf("remote_ext_dict %s error!", e, location);
         } finally {
             try {
                 if (response != null) {
                     response.close();
                 }
             } catch (IOException e) {
-                logger.error(e.getMessage(), e);
+                System.out.println(e);
+                System.out.println(e.getMessage());
             }
         }
     }
-
 }
